@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lead Management System - Daily Email Usage Monitoring">
+    <title>Usage — Lead Management System</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- ── Sidebar ─────────────────────────── -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">📊</div>
+                <div class="sidebar-brand">
+                    Lead Manager
+                    <small>Campaign System</small>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="/dashboard" class="nav-item" data-page="dashboard">
+                        <span class="nav-icon">🏠</span>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Management</div>
+                    <a href="/leads" class="nav-item" data-page="leads">
+                        <span class="nav-icon">👥</span>
+                        <span>Leads</span>
+                        <span class="nav-badge" id="leadCount">0</span>
+                    </a>
+                    <a href="/website-leads" class="nav-item" data-page="website-leads">
+                        <span class="nav-icon">🌐</span>
+                        <span>Website Leads</span>
+                    </a>
+                    <a href="/campaigns" class="nav-item" data-page="campaigns">
+                        <span class="nav-icon">📧</span>
+                        <span>Campaigns</span>
+                    </a>
+                    <a href="/usage" class="nav-item active" data-page="usage">
+                        <span class="nav-icon">📊</span>
+                        <span>Usage</span>
+                    </a>
+                </div>
+
+                <div class="nav-section hidden" id="adminSection">
+                    <div class="nav-section-title">Admin</div>
+                    <a href="/admin" class="nav-item" data-page="admin">
+                        <span class="nav-icon">⚙️</span>
+                        <span>Admin Panel</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name" id="sidebarUserName">Loading...</div>
+                        <div class="user-role" id="sidebarUserRole">—</div>
+                    </div>
+                </div>
+                <button class="btn-logout" id="logoutBtn">
+                    <span>🚪</span>
+                    <span>Sign Out</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ── Main Content ────────────────────── -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+                    <h1 class="page-title">Usage Monitor</h1>
+                </div>
+                <div class="top-bar-right">
+                    <span class="greeting-text">
+                        Welcome, <strong id="greetingName">User</strong>
+                    </span>
+                </div>
+            </header>
+
+            <div class="content-area fade-in">
+                <!-- Usage Header Banner -->
+                <div class="welcome-banner" style="margin-bottom: 28px;">
+                    <h2>📊 Email Campaign Usage</h2>
+                    <p>Monitor your daily email campaign consumption. The limit resets every day at midnight (IST).</p>
+                </div>
+
+                <!-- Alert Banner (shown when usage > 80% or limit reached) -->
+                <div id="usageAlertBanner" class="usage-alert-banner" style="display:none;"></div>
+
+                <!-- Global Usage Card -->
+                <div class="usage-card" id="globalUsageCard">
+                    <div class="usage-card-header">
+                        <div class="usage-card-icon" style="background: linear-gradient(135deg, #3B82F6, #6366F1);">🌐
+                        </div>
+                        <div>
+                            <h3 class="usage-card-title">Global Usage — All Users</h3>
+                            <p class="usage-card-subtitle">Total email campaigns sent today across the entire system</p>
+                        </div>
+                    </div>
+                    <div class="usage-stats-row">
+                        <div class="usage-stat">
+                            <span class="usage-stat-value" id="globalSentCount">—</span>
+                            <span class="usage-stat-label">Sent Today</span>
+                        </div>
+                        <div class="usage-stat">
+                            <span class="usage-stat-value" id="globalLimitCount">—</span>
+                            <span class="usage-stat-label">Daily Limit</span>
+                        </div>
+                        <div class="usage-stat">
+                            <span class="usage-stat-value" id="globalRemainingCount">—</span>
+                            <span class="usage-stat-label">Remaining</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="globalProgressFill" style="width: 0%;"></div>
+                    </div>
+                    <div class="progress-bar-labels">
+                        <span id="globalProgressPercent">0%</span>
+                        <span id="globalProgressText">0 / 0 emails</span>
+                    </div>
+                </div>
+
+                <!-- User Personal Usage Card -->
+                <div class="usage-card" id="userUsageCard" style="margin-top: 24px;">
+                    <div class="usage-card-header">
+                        <div class="usage-card-icon" style="background: linear-gradient(135deg, #8B5CF6, #A855F7);">👤
+                        </div>
+                        <div>
+                            <h3 class="usage-card-title">My Usage — <span id="usageUserName">You</span></h3>
+                            <p class="usage-card-subtitle">Your personal email campaigns sent today (private — only you
+                                can see this)</p>
+                        </div>
+                    </div>
+                    <div class="usage-stats-row">
+                        <div class="usage-stat">
+                            <span class="usage-stat-value" id="userSentCount">—</span>
+                            <span class="usage-stat-label">You Sent Today</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill user-progress-fill" id="userProgressFill" style="width: 0%;">
+                        </div>
+                    </div>
+                    <div class="progress-bar-labels">
+                        <span id="userProgressPercent">0%</span>
+                        <span id="userProgressText">0 / 0 emails</span>
+                    </div>
+                </div>
+
+                <!-- Admin: Set Daily Limit Card (admin only) -->
+                <div class="usage-card admin-limit-card" id="adminLimitCard" style="margin-top: 24px; display: none;">
+                    <div class="usage-card-header">
+                        <div class="usage-card-icon" style="background: linear-gradient(135deg, #F59E0B, #EF4444);">⚙️
+                        </div>
+                        <div>
+                            <h3 class="usage-card-title">Admin — Set Daily Email Limit</h3>
+                            <p class="usage-card-subtitle">Change the maximum number of email campaigns allowed per day
+                                for the entire system</p>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:12px;align-items:flex-end;margin-top:16px;flex-wrap:wrap;">
+                        <div class="form-group" style="margin-bottom:0;flex:1;min-width:180px;">
+                            <label for="adminLimitInput">Daily Limit</label>
+                            <input type="number" id="adminLimitInput" class="form-input" style="padding-left:14px;"
+                                min="1" max="10000" placeholder="500">
+                        </div>
+                        <button class="btn btn-primary" id="btnSaveLimit" style="height:42px;white-space:nowrap;">💾
+                            Save Limit</button>
+                    </div>
+                </div>
+
+                <!-- Email Open Rate / Conversion Rate Card -->
+                <div class="open-rate-card" id="openRateCard" style="margin-top: 24px;">
+                    <div class="open-rate-card-header">
+                        <div class="open-rate-card-icon" style="background: linear-gradient(135deg, #10B981, #059669);">📬
+                        </div>
+                        <div>
+                            <h3 class="open-rate-card-title">Email Open Rate</h3>
+                            <p class="open-rate-card-subtitle">Track how many of your sent emails were opened by recipients</p>
+                        </div>
+                    </div>
+                    <div class="open-rate-stats">
+                        <div class="open-rate-stat">
+                            <span class="open-rate-stat-value" id="openRateSent">—</span>
+                            <span class="open-rate-stat-label">Total Sent</span>
+                        </div>
+                        <div class="open-rate-stat">
+                            <span class="open-rate-stat-value" id="openRateOpened">—</span>
+                            <span class="open-rate-stat-label">Opened</span>
+                        </div>
+                        <div class="open-rate-stat">
+                            <span class="open-rate-stat-value" id="openRatePercent">—</span>
+                            <span class="open-rate-stat-label">Open Rate</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="openRateProgressFill" style="width: 0%; background: linear-gradient(90deg, #10B981, #059669);"></div>
+                    </div>
+                    <div class="progress-bar-labels">
+                        <span id="openRateProgressPercent">0%</span>
+                        <span id="openRateProgressText">0 / 0 opened</span>
+                    </div>
+
+                    <!-- Admin: Per-user breakdown -->
+                    <div id="openRatePerUser" style="display:none; margin-top:20px;">
+                        <h4 style="font-size:0.875rem;font-weight:700;color:#374151;margin-bottom:12px;">📊 Per-User Breakdown</h4>
+                        <table class="open-rate-user-table" id="openRateUserTable">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Sent</th>
+                                    <th>Opened</th>
+                                    <th>Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody id="openRateUserTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Last Updated -->
+                <p style="text-align:center;color:#9CA3AF;font-size:0.75rem;margin-top:24px;">
+                    Auto-refreshes every 60 seconds · Date: <span id="usageDate">—</span> (IST)
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/usage.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leads — Lead Management System</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">📊</div>
+                <div class="sidebar-brand">Lead Manager<small>Campaign System</small></div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="/dashboard" class="nav-item" data-page="dashboard"><span
+                            class="nav-icon">🏠</span><span>Dashboard</span></a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Management</div>
+                    <a href="/leads" class="nav-item active" data-page="leads"><span
+                            class="nav-icon">👥</span><span>Leads</span><span class="nav-badge"
+                            id="leadCount">0</span></a>
+                    <a href="/website-leads" class="nav-item" data-page="website-leads"><span
+                            class="nav-icon">🌐</span><span>Website Leads</span></a>
+                    <a href="/campaigns" class="nav-item" data-page="campaigns"><span
+                            class="nav-icon">📧</span><span>Campaigns</span></a>
+                    <a href="/usage" class="nav-item" data-page="usage"><span
+                            class="nav-icon">📊</span><span>Usage</span></a>
+                </div>
+
+                <div class="nav-section hidden" id="adminSection">
+                    <div class="nav-section-title">Admin</div>
+                    <a href="/admin" class="nav-item" data-page="admin"><span class="nav-icon">⚙️</span><span>Admin
+                            Panel</span></a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name" id="sidebarUserName">Loading...</div>
+                        <div class="user-role" id="sidebarUserRole">—</div>
+                    </div>
+                </div>
+                <button class="btn-logout" id="logoutBtn"><span>🚪</span><span>Sign Out</span></button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+                    <h1 class="page-title">Lead Management</h1>
+                </div>
+                <div class="top-bar-right">
+                    <span class="greeting-text">Welcome, <strong id="greetingName">User</strong></span>
+                </div>
+            </header>
+
+            <div class="content-area fade-in">
+                <!-- Action bar -->
+                <div class="action-bar">
+                    <div class="action-bar-left">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="searchInput" placeholder="Search leads..." class="search-input">
+                        </div>
+                        <select id="statusFilter" class="filter-select">
+                            <option value="">All Status</option>
+                            <option value="new">New</option>
+                            <option value="contacted">Contacted</option>
+                            <option value="won">Approved</option>
+                            <option value="lost">Lost</option>
+                        </select>
+                        <select id="sourceFilter" class="filter-select">
+                            <option value="">All Sources</option>
+                            <option value="manual">Manual</option>
+                            <option value="Website">Website</option>
+                            <option value="excel">Excel</option>
+                            <option value="ocr">OCR</option>
+                        </select>
+                        <input type="date" id="dateFilter" class="filter-select date-filter-input"
+                            title="Filter by date">
+                    </div>
+                    <div class="action-bar-right"
+                        style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px;">
+                        <button class="btn btn-primary btn-sm" id="btnDownloadLeads"
+                            style="background: linear-gradient(135deg, #6366F1, #4F46E5); width: auto;">📥 Download
+                            Leads</button>
+                        <button class="btn btn-danger btn-sm" id="btnDeleteAllLeads">🗑️ Delete All</button>
+                        <button class="btn btn-danger btn-sm hidden" id="btnDeleteSelected"
+                            style="background:linear-gradient(135deg,#EF4444,#DC2626);">🗑️ Delete Selected</button>
+                        <button class="btn btn-primary btn-sm hidden" id="btnBulkCampaign" style="width: auto;">🚀 Run
+                            Bulk Campaign</button>
+                        <button class="btn btn-secondary btn-sm" id="btnScanCard">📷 Scan Image</button>
+                        <button class="btn btn-secondary btn-sm" id="btnSampleFormat"
+                            style="background-color: #10B981; color: white; border: none;">📄 Sample Format</button>
+                        <button class="btn btn-secondary btn-sm" id="btnUploadExcel">📄 Upload Excel</button>
+                        <button class="btn btn-primary btn-sm" id="btnAddLead" style="width: auto;">➕ Add Lead</button>
+                    </div>
+                </div>
+
+                <!-- Selected leads bar (centered, between action bar and table) -->
+                <div class="selected-leads-bar hidden" id="selectedLeadsBar">
+                    <button class="selected-leads-dismiss" id="btnDismissSelection"
+                        title="Deselect all">&times;</button>
+                    <span class="selected-leads-text" id="selectedLeadCount">0 selected</span>
+                </div>
+
+                <!-- Hidden file inputs -->
+                <input type="file" id="excelFileInput" accept=".xlsx,.xls,.csv" style="display:none">
+                <input type="file" id="cardFileInput" accept=".jpg,.jpeg,.png,.bmp,.tiff,.tif" style="display:none">
+
+                <!-- Leads table -->
+                <div class="card mt-4">
+                    <div class="card-body" style="padding: 0;">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAllLeads"></th>
+                                        <th>Company</th>
+                                        <th>Contact</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Source</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leadsTableBody">
+                                    <tr>
+                                        <td colspan="8" class="text-center" style="padding:40px;color:#9CA3AF;">Loading
+                                            leads...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-container" id="paginationContainer">
+                    <div class="pagination-left">
+                        <span class="pagination-label">Rows per page</span>
+                        <select id="rowsPerPage" class="pagination-select">
+                            <option value="25" selected>25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="all">All</option>
+                        </select>
+                    </div>
+                    <div class="pagination-right" id="paginationNav"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/leads.js"></script>
+
+    <!-- Scroll toggle button -->
+    <button class="scroll-toggle-btn" id="scrollToggleBtn" title="Scroll down">
+        <svg id="scrollArrowIcon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </button>
+    <script>
+        (function () {
+            const btn = document.getElementById('scrollToggleBtn');
+            const icon = document.getElementById('scrollArrowIcon');
+            let atBottom = false;
+
+            function updateArrow() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollHeight = document.documentElement.scrollHeight;
+                const clientHeight = document.documentElement.clientHeight;
+                const isScrollable = scrollHeight > clientHeight + 50;
+                atBottom = isScrollable && scrollTop > 200 && (scrollTop + clientHeight) >= (scrollHeight - 40);
+                icon.style.transform = atBottom ? 'rotate(180deg)' : 'rotate(0deg)';
+                btn.title = atBottom ? 'Scroll to top' : 'Scroll to bottom';
+            }
+
+            btn.addEventListener('click', () => {
+                if (atBottom) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+                }
+            });
+
+            window.addEventListener('scroll', updateArrow, { passive: true });
+            updateArrow();
+        })();
+    </script>
+</body>
+
+</html>

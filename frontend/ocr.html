@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Card — Lead Management System</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">📊</div>
+                <div class="sidebar-brand">Lead Manager<small>Campaign System</small></div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div><a href="/dashboard" class="nav-item"><span
+                            class="nav-icon">🏠</span><span>Dashboard</span></a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Management</div><a href="/leads" class="nav-item"><span
+                            class="nav-icon">👥</span><span>Leads</span><span class="nav-badge"
+                            id="leadCount">0</span></a><a href="/website-leads" class="nav-item"><span
+                            class="nav-icon">🌐</span><span>Website Leads</span></a><a href="/campaigns"
+                        class="nav-item"><span class="nav-icon">📧</span><span>Campaigns</span></a><a href="/usage"
+                        class="nav-item" data-page="usage"><span class="nav-icon">📊</span><span>Usage</span></a>
+                </div>
+
+                <div class="nav-section hidden" id="adminSection">
+                    <div class="nav-section-title">Admin</div><a href="/admin" class="nav-item"><span
+                            class="nav-icon">⚙️</span><span>Admin Panel</span></a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name" id="sidebarUserName">Loading...</div>
+                        <div class="user-role" id="sidebarUserRole">-</div>
+                    </div>
+                </div><button class="btn-logout" id="logoutBtn"><span>🚪</span><span>Sign Out</span></button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="top-bar-left"><button class="menu-toggle" id="menuToggle">☰</button>
+                    <h1 class="page-title">Scan Visiting Card</h1>
+                </div>
+                <div class="top-bar-right"><span class="greeting-text">Welcome, <strong
+                            id="greetingName">User</strong></span></div>
+            </header>
+
+            <div class="content-area fade-in">
+                <!-- Upload area -->
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Upload Visiting Card Image</span></div>
+                    <div class="card-body">
+                        <div class="upload-zone" id="uploadZone">
+                            <div class="upload-zone-content">
+                                <div style="font-size:3rem;margin-bottom:16px;">📷</div>
+                                <h3>Drop visiting card image here</h3>
+                                <p>or click to select a file</p>
+                                <p style="font-size:0.75rem;color:#9CA3AF;margin-top:8px;">Supports: JPG, PNG, BMP, TIFF
+                                </p>
+                            </div>
+                            <input type="file" id="cardFileInput" accept=".jpg,.jpeg,.png,.bmp,.tiff,.tif"
+                                style="display:none">
+                        </div>
+
+                        <!-- Image preview -->
+                        <div id="imagePreview" class="hidden" style="margin-top:20px;text-align:center;">
+                            <img id="previewImg" src=""
+                                style="max-width:400px;max-height:300px;border-radius:12px;border:2px solid #E5E7EB;">
+                        </div>
+
+                        <!-- Scan button -->
+                        <div id="scanBtnContainer" class="hidden" style="margin-top:20px;text-align:center;">
+                            <button class="btn btn-primary" id="btnScan">🔍 Scan & Extract Data</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Extracted data (shown after scan) -->
+                <div class="card mt-8 hidden" id="extractedCard">
+                    <div class="card-header">
+                        <span class="card-title">Extracted Data</span>
+                        <span class="badge badge-info">Review & Edit</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="ocrCompany">Company Name</label>
+                            <input type="text" id="ocrCompany" class="form-input" style="padding-left:14px;">
+                        </div>
+                        <div class="form-group">
+                            <label for="ocrContact">Contact Name</label>
+                            <input type="text" id="ocrContact" class="form-input" style="padding-left:14px;">
+                        </div>
+                        <div class="form-group">
+                            <label for="ocrEmail">Email</label>
+                            <input type="email" id="ocrEmail" class="form-input" style="padding-left:14px;">
+                        </div>
+                        <div class="form-group">
+                            <label for="ocrPhone">Phone</label>
+                            <input type="text" id="ocrPhone" class="form-input" style="padding-left:14px;">
+                        </div>
+                        <div class="form-group">
+                            <label>Raw OCR Text</label>
+                            <textarea id="ocrRawText" class="form-input"
+                                style="padding-left:14px;min-height:80px;resize:vertical;" readonly></textarea>
+                        </div>
+                        <div style="display:flex;gap:12px;margin-top:20px;">
+                            <button class="btn btn-primary" id="btnSaveLead">💾 Save as Lead</button>
+                            <button class="btn btn-secondary" id="btnResetOCR">🔄 Scan Another</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/ocr.js"></script>
+</body>
+
+</html>

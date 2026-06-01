@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Book a meeting with D&V Business Consulting - Schedule your appointment online">
+    <title>Book a Meeting — D&V Business Consulting</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="booking-page">
+    <!-- Loading State -->
+    <div id="loadingState" class="booking-loading">
+        <div class="booking-spinner"></div>
+        <p>Validating your booking link...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorState" class="booking-error" style="display:none;">
+        <div class="booking-card">
+            <div class="booking-error-icon">⚠️</div>
+            <h2 id="errorTitle">Invalid Booking Link</h2>
+            <p id="errorMessage">This booking link is not valid or has expired.</p>
+            <a href="https://dvconsulting.co.in" class="btn btn-primary"
+                style="max-width:280px;margin:24px auto 0;display:block;text-align:center;">
+                Visit Our Website
+            </a>
+        </div>
+    </div>
+
+    <!-- Booking Form -->
+    <div id="bookingForm" class="booking-container" style="display:none;">
+        <div class="booking-card">
+            <!-- Header -->
+            <div class="booking-header">
+                <div class="booking-logo">📅</div>
+                <h1>Book a Meeting</h1>
+                <p id="bookingSubtitle">Schedule a convenient time for our meeting</p>
+            </div>
+
+            <!-- Lead Info Banner -->
+            <div id="leadInfoBanner" class="booking-info-banner">
+                <div class="booking-info-row">
+                    <span class="booking-info-label">👤 Contact</span>
+                    <span id="displayContactName" class="booking-info-value">—</span>
+                </div>
+                <div class="booking-info-row">
+                    <span class="booking-info-label">🏢 Company</span>
+                    <span id="displayCompanyName" class="booking-info-value">—</span>
+                </div>
+            </div>
+
+            <!-- Form Fields -->
+            <form id="meetingForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="bookTitle">Meeting Title</label>
+                    <input type="text" id="bookTitle" class="form-input" style="padding-left:14px;"
+                        placeholder="e.g. Discovery Call" required>
+                </div>
+
+                <div class="booking-grid-2">
+                    <div class="form-group">
+                        <label for="bookDate">Date</label>
+                        <input type="date" id="bookDate" class="form-input" style="padding-left:14px;" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookTime">Time</label>
+                        <input type="time" id="bookTime" class="form-input" style="padding-left:14px;" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bookDuration">Duration</label>
+                    <select id="bookDuration" class="form-input" style="padding-left:14px;">
+                        <option value="30">30 minutes</option>
+                        <option value="60" selected>60 minutes</option>
+                        <option value="90">90 minutes</option>
+                        <option value="120">2 hours</option>
+                    </select>
+                </div>
+
+                <div class="booking-grid-2">
+                    <div class="form-group">
+                        <label for="bookClientName">Your Name</label>
+                        <input type="text" id="bookClientName" class="form-input" style="padding-left:14px;"
+                            placeholder="Your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookClientEmail">Your Email</label>
+                        <input type="email" id="bookClientEmail" class="form-input" style="padding-left:14px;"
+                            placeholder="your@email.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bookNotes">Notes (optional)</label>
+                    <textarea id="bookNotes" class="form-input"
+                        style="padding-left:14px;min-height:80px;resize:vertical;"
+                        placeholder="Any topics you'd like to discuss..."></textarea>
+                </div>
+
+                <!-- Inline Error Message (visible near the button) -->
+                <div id="bookingInlineError" class="booking-inline-error" style="display:none;"></div>
+
+                <!-- Submit Button -->
+                <button type="button" id="bookSubmitBtn" class="btn btn-primary booking-submit-btn"
+                    onclick="submitBooking()">
+                    📅 Book Meeting
+                </button>
+
+                <p class="booking-disclaimer">
+                    A calendar invite will be sent to your email with a Google Meet link.
+                </p>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="booking-footer">
+            <p>Powered by <strong>D&V Business Consulting</strong></p>
+        </div>
+    </div>
+
+    <script src="/js/booking.js"></script>
+</body>
+
+</html>

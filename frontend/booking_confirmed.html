@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your meeting with D&V Business Consulting has been confirmed!">
+    <title>Booking Confirmed — D&V Business Consulting</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="booking-page">
+    <!-- Loading State -->
+    <div id="loadingState" class="booking-loading">
+        <div class="booking-spinner"></div>
+        <p>Loading meeting details...</p>
+    </div>
+
+    <!-- Confirmation Content -->
+    <div id="confirmContent" class="booking-container" style="display:none;">
+        <div class="booking-card confirmation-card">
+            <!-- Success Header -->
+            <div class="confirmation-header">
+                <div class="confirmation-check">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <h1>Meeting Confirmed!</h1>
+                <p>Your calendar invite has been sent to your email</p>
+            </div>
+
+            <!-- Meeting Details -->
+            <div class="confirmation-details">
+                <div class="confirmation-detail-row">
+                    <span class="confirmation-icon">📅</span>
+                    <div>
+                        <div class="confirmation-label">Meeting</div>
+                        <div id="confTitle" class="confirmation-value">—</div>
+                    </div>
+                </div>
+                <div class="confirmation-detail-row">
+                    <span class="confirmation-icon">🕐</span>
+                    <div>
+                        <div class="confirmation-label">Date & Time</div>
+                        <div id="confDateTime" class="confirmation-value">—</div>
+                    </div>
+                </div>
+                <div class="confirmation-detail-row">
+                    <span class="confirmation-icon">⏱️</span>
+                    <div>
+                        <div class="confirmation-label">Duration</div>
+                        <div id="confDuration" class="confirmation-value">—</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Google Meet Link -->
+            <div id="meetLinkSection" class="confirmation-meet-section" style="display:none;">
+                <div class="confirmation-meet-label">🔗 Google Meet Link</div>
+                <div class="confirmation-meet-link">
+                    <a id="confMeetLink" href="#" target="_blank">—</a>
+                    <button id="copyMeetBtn" class="btn btn-sm" onclick="copyMeetLink()"
+                        style="background:#059669;color:white;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-weight:600;">
+                        📋 Copy
+                    </button>
+                </div>
+            </div>
+
+            <!-- Calendar Link -->
+            <div id="calendarLinkSection" class="confirmation-calendar-link" style="display:none;">
+                <a id="confCalendarLink" href="#" target="_blank">
+                    📅 View in Google Calendar →
+                </a>
+            </div>
+
+            <!-- Footer -->
+            <div class="confirmation-footer-note">
+                <p>✅ A calendar invite with the meeting link has been sent to your email address.</p>
+                <p>Please check your inbox (and spam folder) for the invite.</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="booking-footer">
+            <p>Powered by <strong>D&V Business Consulting</strong></p>
+        </div>
+    </div>
+
+    <script src="/js/booking.js"></script>
+</body>
+
+</html>

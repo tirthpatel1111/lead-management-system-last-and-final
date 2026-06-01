@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lead Management System - Dashboard">
+    <title>Dashboard — Lead Management System</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- ── Sidebar ─────────────────────────── -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">📊</div>
+                <div class="sidebar-brand">
+                    Lead Manager
+                    <small>Campaign System</small>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="/dashboard" class="nav-item active" data-page="dashboard">
+                        <span class="nav-icon">🏠</span>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Management</div>
+                    <a href="/leads" class="nav-item" data-page="leads">
+                        <span class="nav-icon">👥</span>
+                        <span>Leads</span>
+                        <span class="nav-badge" id="leadCount">0</span>
+                    </a>
+                    <a href="/website-leads" class="nav-item" data-page="website-leads">
+                        <span class="nav-icon">🌐</span>
+                        <span>Website Leads</span>
+                    </a>
+                    <a href="/campaigns" class="nav-item" data-page="campaigns">
+                        <span class="nav-icon">📧</span>
+                        <span>Campaigns</span>
+                    </a>
+                    <a href="/usage" class="nav-item" data-page="usage">
+                        <span class="nav-icon">📊</span>
+                        <span>Usage</span>
+                    </a>
+                </div>
+
+
+
+                <div class="nav-section hidden" id="adminSection">
+                    <div class="nav-section-title">Admin</div>
+                    <a href="/admin" class="nav-item" data-page="admin">
+                        <span class="nav-icon">⚙️</span>
+                        <span>Admin Panel</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name" id="sidebarUserName">Loading...</div>
+                        <div class="user-role" id="sidebarUserRole">—</div>
+                    </div>
+                </div>
+                <button class="btn-logout" id="logoutBtn">
+                    <span>🚪</span>
+                    <span>Sign Out</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ── Main Content ────────────────────── -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+                    <h1 class="page-title">Dashboard</h1>
+                </div>
+                <div class="top-bar-right">
+                    <span class="greeting-text">
+                        Welcome, <strong id="greetingName">User</strong>
+                    </span>
+                </div>
+            </header>
+
+            <div class="content-area fade-in">
+                <!-- Welcome banner -->
+                <div class="welcome-banner">
+                    <h2 id="welcomeText">Good morning! 👋</h2>
+                    <p>Here's an overview of your lead management activities. Stay on top of your pipeline and
+                        campaigns.</p>
+                </div>
+
+                <!-- Stats grid -->
+                <div class="stats-grid">
+                    <div class="stat-card" style="cursor: pointer;" onclick="window.location.href='/leads'">
+                        <div class="stat-card-header">
+                            <span class="stat-card-label">Total Leads</span>
+                            <div class="stat-card-icon">👥</div>
+                        </div>
+                        <div class="stat-card-value" id="statLeads">0</div>
+                        <div class="stat-card-change">All time</div>
+                    </div>
+                    <div class="stat-card" style="cursor: pointer;" onclick="window.location.href='/campaigns'">
+                        <div class="stat-card-header">
+                            <span class="stat-card-label">Campaigns Sent</span>
+                            <div class="stat-card-icon">📨</div>
+                        </div>
+                        <div class="stat-card-value" id="statCampaigns">0</div>
+                        <div class="stat-card-change">All time</div>
+                    </div>
+                    <div class="stat-card" style="cursor: pointer;"
+                        onclick="window.location.href='/campaigns?type=email'">
+                        <div class="stat-card-header">
+                            <span class="stat-card-label">Email Campaigns</span>
+                            <div class="stat-card-icon">📧</div>
+                        </div>
+                        <div class="stat-card-value" id="statEmails">0</div>
+                        <div class="stat-card-change">Sent via SMTP</div>
+                    </div>
+                    <div class="stat-card" style="cursor: pointer;"
+                        onclick="window.location.href='/campaigns?type=whatsapp'">
+                        <div class="stat-card-header">
+                            <span class="stat-card-label">WhatsApp Sent</span>
+                            <div class="stat-card-icon">💬</div>
+                        </div>
+                        <div class="stat-card-value" id="statWhatsApp">0</div>
+                        <div class="stat-card-change">Sent via Interakt</div>
+                    </div>
+                </div>
+
+                <!-- Lead Status Breakdown -->
+                <div class="stats-grid" style="margin-bottom: 32px;">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #EFF6FF, white); cursor: pointer;"
+                        onclick="window.location.href='/leads?status=new'">
+                        <div class="stat-card-header">
+                            <span class="stat-card-label">New Leads</span>
+                            <div class="stat-card-icon" style="background: #DBEAFE; color: #2563EB;">🆕</div>
+                        </div>
+                        <div class="stat-card-value" id="statNew" style="color: #2563EB;">0</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #ECFDF5, white); cursor: pointer;"
+                        onclick="window.location.href='/leads?status=won'">
+                        <div class="stat-card-header">
+                            <span class="stat-card-label">Approved</span>
+                            <div class="stat-card-icon" style="background: #D1FAE5; color: #059669;">✅</div>
+                        </div>
+                        <div class="stat-card-value" id="statWon" style="color: #059669;">0</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #FFFBEB, white); cursor: pointer;"
+                        onclick="window.location.href='/leads?status=contacted'">
+                        <div class="stat-card-header">
+                            <span class="stat-card-label">Contacted</span>
+                            <div class="stat-card-icon" style="background: #FEF3C7; color: #D97706;">📞</div>
+                        </div>
+                        <div class="stat-card-value" id="statContacted" style="color: #D97706;">0</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #FEF2F2, white); cursor: pointer;"
+                        onclick="window.location.href='/leads?status=lost'">
+                        <div class="stat-card-header">
+                            <span class="stat-card-label">Lost</span>
+                            <div class="stat-card-icon" style="background: #FEE2E2; color: #DC2626;">❌</div>
+                        </div>
+                        <div class="stat-card-value" id="statLost" style="color: #DC2626;">0</div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <h3 style="font-size: 1rem; font-weight: 700; color: #111827; margin-bottom: 16px;">Quick Actions</h3>
+                <div class="quick-actions">
+                    <a href="/leads?action=add" class="action-card">
+                        <div class="action-icon">➕</div>
+                        <h4>Add Lead</h4>
+                        <p>Create a new lead manually</p>
+                    </a>
+                    <a href="/leads?action=upload" class="action-card">
+                        <div class="action-icon">📄</div>
+                        <h4>Upload Excel</h4>
+                        <p>Bulk import leads</p>
+                    </a>
+                    <a href="/ocr" class="action-card">
+                        <div class="action-icon">📷</div>
+                        <h4>Scan Card</h4>
+                        <p>OCR visiting card</p>
+                    </a>
+                    <a href="/campaigns" class="action-card">
+                        <div class="action-icon">🚀</div>
+                        <h4>Campaigns</h4>
+                        <p>Send email or WhatsApp</p>
+                    </a>
+                </div>
+
+                <!-- Recent Campaigns -->
+                <div class="card mt-8">
+                    <div class="card-header">
+                        <span class="card-title">Recent Campaigns</span>
+                        <a href="/campaigns" class="btn btn-sm btn-secondary">View All</a>
+                    </div>
+                    <div class="card-body" id="recentCampaignsBody">
+                        <div class="empty-state">
+                            <div class="empty-icon">📋</div>
+                            <h3>No campaigns yet</h3>
+                            <p>Your recent campaign activities will appear here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/dashboard.js"></script>
+</body>
+
+</html>

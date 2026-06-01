@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel — Lead Management System</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">📊</div>
+                <div class="sidebar-brand">Lead Manager<small>Campaign System</small></div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div><a href="/dashboard" class="nav-item"><span
+                            class="nav-icon">🏠</span><span>Dashboard</span></a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Management</div><a href="/leads" class="nav-item"><span
+                            class="nav-icon">👥</span><span>Leads</span><span class="nav-badge"
+                            id="leadCount">0</span></a><a href="/website-leads" class="nav-item"><span
+                            class="nav-icon">🌐</span><span>Website Leads</span></a><a href="/campaigns"
+                        class="nav-item"><span class="nav-icon">📧</span><span>Campaigns</span></a><a href="/usage"
+                        class="nav-item" data-page="usage"><span class="nav-icon">📊</span><span>Usage</span></a>
+                </div>
+
+                <div class="nav-section hidden" id="adminSection">
+                    <div class="nav-section-title">Admin</div><a href="/admin" class="nav-item active"><span
+                            class="nav-icon">⚙️</span><span>Admin Panel</span></a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name" id="sidebarUserName">Loading...</div>
+                        <div class="user-role" id="sidebarUserRole">-</div>
+                    </div>
+                </div><button class="btn-logout" id="logoutBtn"><span>🚪</span><span>Sign Out</span></button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="top-bar-left"><button class="menu-toggle" id="menuToggle">☰</button>
+                    <h1 class="page-title">Admin Panel</h1>
+                </div>
+                <div class="top-bar-right"><span class="greeting-text">Welcome, <strong
+                            id="greetingName">Admin</strong></span></div>
+            </header>
+
+            <div class="content-area fade-in">
+                <!-- User Management -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">User Management</span>
+                        <button class="btn btn-primary btn-sm" id="btnAddUser">➕ Add User</button>
+                    </div>
+                    <div class="card-body" style="padding:0;">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Full Name</th>
+                                        <th>Role</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <tr>
+                                        <td colspan="8" class="text-center" style="padding:40px;color:#9CA3AF;">
+                                            Loading...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gmail API Settings -->
+                <div class="card mt-8">
+                    <div class="card-header">
+                        <span class="card-title">📧 Gmail API Settings (Outgoing Email)</span>
+                        <span class="badge" id="gmailStatus">Not Configured</span>
+                    </div>
+                    <div class="card-body">
+                        <div
+                            style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:10px;padding:14px;margin-bottom:16px;font-size:0.8125rem;color:#92400E;">
+                            <strong>📋 How to set up Gmail API:</strong><br>
+                            1. Go to <a href="https://console.cloud.google.com/" target="_blank"
+                                style="color:#B45309;">Google Cloud Console</a> → APIs &amp; Services → Enable
+                            <strong>Gmail API</strong><br>
+                            2. Go to Credentials → Create an <strong>OAuth 2.0 Client ID</strong> (Desktop app type)<br>
+                            3. Add <code>https://www.googleapis.com/auth/gmail.send</code> scope to your OAuth consent
+                            screen<br>
+                            4. Complete a one-time OAuth flow to get a <strong>refresh token</strong><br>
+                            5. These credentials are <strong>independent</strong> from Google Calendar — you can use
+                            different Google accounts for each.
+                        </div>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;">
+                            <div class="form-group"><label>Client ID</label><input type="text" id="gmailClientId"
+                                    class="form-input" style="padding-left:14px;"
+                                    placeholder="xxxxxxxx.apps.googleusercontent.com"></div>
+                            <div class="form-group"><label>Client Secret</label><input type="password"
+                                    id="gmailClientSecret" class="form-input" style="padding-left:14px;"
+                                    placeholder="Client Secret" autocomplete="new-password"></div>
+                            <div class="form-group"><label>Refresh Token</label><input type="password"
+                                    id="gmailRefreshToken" class="form-input" style="padding-left:14px;"
+                                    placeholder="1//0xxxxxxxxxxxxxxxx" autocomplete="new-password"></div>
+                            <div class="form-group"><label>From Email</label><input type="email" id="gmailFromEmail"
+                                    class="form-input" style="padding-left:14px;" placeholder="noreply@company.com">
+                            </div>
+                            <div class="form-group"><label>From Name</label><input type="text" id="gmailFromName"
+                                    class="form-input" style="padding-left:14px;" placeholder="Lead Manager"
+                                    value="Lead Manager"></div>
+                        </div>
+                        <button class="btn btn-primary btn-sm mt-4" id="btnSaveGmail">Save Gmail API Settings</button>
+                    </div>
+                </div>
+
+                <!-- Default CC Emails -->
+                <div class="card mt-8">
+                    <div class="card-header">
+                        <span class="card-title">📬 Default CC Emails</span>
+                    </div>
+                    <div class="card-body">
+                        <div
+                            style="background:#EDE9FE;border:1px solid #C4B5FD;border-radius:10px;padding:14px;margin-bottom:16px;font-size:0.8125rem;color:#5B21B6;">
+                            <strong>📋 How CC emails work:</strong><br>
+                            Add email addresses here to automatically CC them on outgoing campaigns and/or meeting
+                            invitations.<br>
+                            These are <strong>default CCs</strong> — they are read-only for salespersons and cannot be
+                            removed by them.<br>
+                            CC is <strong>not applied</strong> to automated Thank You emails.
+                        </div>
+                        <div
+                            style="display:grid;grid-template-columns:1fr auto auto auto;gap:12px;align-items:end;margin-bottom:16px;">
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label>CC Email Address</label>
+                                <input type="email" id="newCCEmail" class="form-input" style="padding-left:14px;"
+                                    placeholder="e.g. manager@company.com">
+                            </div>
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label
+                                    style="display:flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;">
+                                    <input type="checkbox" id="ccScopeOutgoing" checked
+                                        style="width:16px;height:16px;accent-color:#6366F1;">
+                                    Outgoing
+                                </label>
+                            </div>
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label
+                                    style="display:flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;">
+                                    <input type="checkbox" id="ccScopeMeetings" checked
+                                        style="width:16px;height:16px;accent-color:#6366F1;">
+                                    Meetings
+                                </label>
+                            </div>
+                            <button class="btn btn-primary" id="btnAddCCEmail" style="height:38px;">Add</button>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Email</th>
+                                        <th>Outgoing</th>
+                                        <th>Meetings</th>
+                                        <th>Added</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ccEmailsTableBody">
+                                    <tr>
+                                        <td colspan="5" class="text-center" style="padding:20px;color:#9CA3AF;">
+                                            Loading...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-8">
+                    <div class="card-header">
+                        <span class="card-title">📥 Gmail API Settings (Incoming Leads)</span>
+                        <span class="badge" id="imapStatus">Not Configured</span>
+                    </div>
+                    <div class="card-body">
+                        <div
+                            style="background:#EEF2FF;border:1px solid #C7D2FE;border-radius:10px;padding:14px;margin-bottom:16px;font-size:0.8125rem;color:#3730A3;">
+                            <strong>📋 How this works:</strong><br>
+                            The system will check this mailbox every few minutes for emails with "Website Lead" in the
+                            subject.<br>
+                            It will extract lead info and automatically assign it to your salespersons in a round-robin
+                            format.<br>
+                            <strong>Important:</strong> You must create an OAuth 2.0 Client ID and authorize it to get a
+                            refresh token with `gmail.readonly` and `gmail.modify` scopes for the receiving email
+                            address.
+                        </div>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;">
+                            <div class="form-group"><label>Client ID</label><input type="text" id="imapClientId"
+                                    class="form-input" style="padding-left:14px;"
+                                    placeholder="xxxxxxxx.apps.googleusercontent.com"></div>
+                            <div class="form-group"><label>Client Secret</label><input type="password"
+                                    id="imapClientSecret" class="form-input" style="padding-left:14px;"
+                                    placeholder="Client Secret" autocomplete="new-password"></div>
+                            <div class="form-group"><label>Refresh Token</label><input type="password"
+                                    id="imapRefreshToken" class="form-input" style="padding-left:14px;"
+                                    placeholder="1//0xxxxxxxxxxxxxxxx" autocomplete="new-password"></div>
+                            <div class="form-group"><label>Fetch Email Address</label><input type="email" id="imapEmail"
+                                    class="form-input" style="padding-left:14px;" placeholder="leads@company.com"></div>
+                        </div>
+                        <button class="btn btn-primary btn-sm mt-4" id="btnSaveIMAP">Save Incoming Email
+                            Settings</button>
+                    </div>
+                </div>
+
+                <!-- Interakt WhatsApp Settings -->
+                <div class="card mt-8">
+                    <div class="card-header">
+                        <span class="card-title">💬 Interakt WhatsApp Settings</span>
+                        <span class="badge" id="interaktStatus">Not Configured</span>
+                    </div>
+                    <div class="card-body">
+                        <div
+                            style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:10px;padding:14px;margin-bottom:16px;font-size:0.8125rem;color:#166534;">
+                            <strong>📋 How to get Interakt credentials:</strong><br>
+                            1. Log in to your <strong>Interakt Dashboard</strong> at <a href="https://app.interakt.ai"
+                                target="_blank" style="color:#15803D;">app.interakt.ai</a><br>
+                            2. Go to <strong>Settings → Developer Settings</strong> → copy your <strong>Secret
+                                Key</strong><br>
+                            3. Paste below and click Save.<br>
+                            4. Add your approved templates in the section below.
+                        </div>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;">
+                            <div class="form-group"><label>API Key (Secret Key)</label><input type="password"
+                                    id="interaktApiKey" class="form-input" style="padding-left:14px;"
+                                    placeholder="Interakt Secret Key" autocomplete="new-password"></div>
+                            <div class="form-group"><label>Language Code</label><input type="text" id="interaktLang"
+                                    class="form-input" style="padding-left:14px;" placeholder="en" value="en"></div>
+                        </div>
+                        <button class="btn btn-primary btn-sm mt-4" id="btnSaveInterakt">Save Interakt Settings</button>
+                    </div>
+                </div>
+
+                <!-- WhatsApp Templates Management -->
+                <div class="card mt-8">
+                    <div class="card-header">
+                        <span class="card-title">📱 WhatsApp Templates</span>
+                    </div>
+                    <div class="card-body">
+                        <div
+                            style="background:#EEF2FF;border:1px solid #C7D2FE;border-radius:10px;padding:14px;margin-bottom:16px;font-size:0.8125rem;color:#3730A3;">
+                            <strong>📋 Add Meta-Approved Templates:</strong><br>
+                            Add the templates you have approved in Interakt/Meta here. They will appear as a dropdown in
+                            the WhatsApp campaign modal.
+                        </div>
+                        <div
+                            style="display:grid;grid-template-columns:1fr 1fr auto;gap:16px;align-items:end;margin-bottom:16px;">
+                            <div class="form-group"><label>Template Display Name</label><input type="text"
+                                    id="newTemplateName" class="form-input" style="padding-left:14px;"
+                                    placeholder="e.g. Welcome Message"></div>
+                            <div class="form-group"><label>Template Code Name</label><input type="text"
+                                    id="newTemplateCode" class="form-input" style="padding-left:14px;"
+                                    placeholder="e.g. welcome_msg_01"></div>
+                            <button class="btn btn-primary" id="btnAddTemplate" style="height:38px;">Add</button>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Code Name</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="templatesTableBody">
+                                    <tr>
+                                        <td colspan="4" class="text-center" style="padding:20px;color:#9CA3AF;">
+                                            Loading...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email HTML Campaign Templates Management -->
+                <div class="card mt-8">
+                    <div class="card-header">
+                        <span class="card-title">📧 Email HTML Campaign Templates</span>
+                    </div>
+                    <div class="card-body">
+                        <div
+                            style="background:#EEF2FF;border:1px solid #C7D2FE;border-radius:10px;padding:14px;margin-bottom:16px;font-size:0.8125rem;color:#3730A3;">
+                            <strong>📋 Create Email Templates:</strong><br>
+                            Add the HTML templates for email campaigns here. These will appear as a dropdown in the
+                            Email campaign modal for salespersons. No coding required from users.
+                        </div>
+                        <div class="form-group">
+                            <label>Template Display Name</label>
+                            <input type="text" id="newEmailTemplateName" class="form-input"
+                                style="padding-left:14px;margin-bottom:12px;" placeholder="e.g. POSH Introduction">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label>Format</label>
+                            <select id="newEmailTemplateFormat" class="form-input"
+                                style="padding-left:14px; width: auto; min-width: 200px;">
+                                <option value="text">Text</option>
+                                <option value="html">HTML Code</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Content</label>
+                            <textarea id="newEmailTemplateBody" class="form-input"
+                                style="display:none; padding-left:14px;min-height:150px;resize:vertical;font-family:monospace;font-size:12px;margin-bottom:12px;"
+                                placeholder="Paste your HTML code here..."></textarea>
+                            <div id="newEmailTemplateText" class="form-input" contenteditable="true"
+                                style="padding:14px; min-height:150px; background:#fff; overflow-y:auto; margin-bottom:12px; border:1px solid #D1D5DB; border-radius:8px;">
+                            </div>
+                        </div>
+                        <div style="text-align: right; margin-bottom:16px;">
+                            <button class="btn btn-primary" id="btnAddEmailTemplate">Add Email Template</button>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="emailTemplatesTableBody">
+                                    <tr>
+                                        <td colspan="3" class="text-center" style="padding:20px;color:#9CA3AF;">
+                                            Loading...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Calendar Settings -->
+                <div class="card mt-8">
+                    <div class="card-header">
+                        <span class="card-title">📅 Google Calendar Settings</span>
+                        <span class="badge" id="gcalStatus">Not Configured</span>
+                    </div>
+                    <div class="card-body">
+                        <div
+                            style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:10px;padding:14px;margin-bottom:16px;font-size:0.8125rem;color:#1D4ED8;">
+                            <strong>📋 How to get credentials:</strong><br>
+                            1. Go to <a href="https://console.cloud.google.com/" target="_blank"
+                                style="color:#2563EB;">Google Cloud Console</a> → APIs &amp; Services → Credentials<br>
+                            2. Create an <strong>OAuth 2.0 Client ID</strong> (Desktop app type)<br>
+                            3. Enable <strong>Google Calendar API</strong> in your project<br>
+                            4. Use the client ID &amp; secret to complete a one-time OAuth flow to get a <strong>refresh
+                                token</strong><br>
+                            5. The admin calendar email is the Google account whose calendar will be used for meetings.
+                        </div>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;">
+                            <div class="form-group"><label>Client ID</label><input type="text" id="gcalClientId"
+                                    class="form-input" style="padding-left:14px;"
+                                    placeholder="xxxxxxxx.apps.googleusercontent.com"></div>
+                            <div class="form-group"><label>Client Secret</label><input type="password"
+                                    id="gcalClientSecret" class="form-input" style="padding-left:14px;"
+                                    placeholder="Client Secret" autocomplete="new-password"></div>
+                            <div class="form-group"><label>Refresh Token</label><input type="password"
+                                    id="gcalRefreshToken" class="form-input" style="padding-left:14px;"
+                                    placeholder="1//0xxxxxxxxxxxxxxxx" autocomplete="new-password"></div>
+                            <div class="form-group"><label>Admin Calendar Email</label><input type="email"
+                                    id="gcalEmail" class="form-input" style="padding-left:14px;"
+                                    placeholder="admin@company.com"></div>
+                        </div>
+                        <button class="btn btn-primary btn-sm mt-4" id="btnSaveGCal">Save Google Calendar
+                            Settings</button>
+                    </div>
+                </div>
+
+                <!-- Office Hours & Meeting Settings -->
+                <div class="card mt-8">
+                    <div class="card-header">
+                        <span class="card-title">🕐 Office Hours & Meeting Settings</span>
+                    </div>
+                    <div class="card-body">
+                        <div
+                            style="background:#FFF7ED;border:1px solid #FDBA74;border-radius:10px;padding:14px;margin-bottom:16px;font-size:0.8125rem;color:#9A3412;">
+                            <strong>📋 How this works:</strong><br>
+                            Set the working hours for meeting scheduling. All users (admin, salespersons) and clients
+                            (booking page) can only schedule meetings within these hours (IST).<br>
+                            The <strong>buffer</strong> ensures a gap between consecutive meetings for the same person.
+                            E.g., a 30-minute buffer means if a meeting ends at 4:00 PM, the next meeting can only start
+                            at 4:30 PM.
+                        </div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+                            <div class="form-group">
+                                <label for="officeStartTime">Office Start Time (IST)</label>
+                                <input type="time" id="officeStartTime" class="form-input"
+                                    style="padding-left:14px;" value="09:00">
+                            </div>
+                            <div class="form-group">
+                                <label for="officeEndTime">Office End Time (IST)</label>
+                                <input type="time" id="officeEndTime" class="form-input"
+                                    style="padding-left:14px;" value="18:00">
+                            </div>
+                            <div class="form-group">
+                                <label for="meetingBuffer">Buffer Between Meetings (min)</label>
+                                <input type="number" id="meetingBuffer" class="form-input"
+                                    style="padding-left:14px;" value="30" min="0" max="120" step="5">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-sm mt-4" id="btnSaveOfficeHours">Save Office Hours</button>
+                    </div>
+                </div>
+                <div class="card mt-8">
+                    <div class="card-header">
+                        <span class="card-title">💌 Thank You Email Templates</span>
+                    </div>
+                    <div class="card-body">
+                        <div
+                            style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px;padding:14px;margin-bottom:16px;font-size:0.8125rem;color:#92400E;">
+                            <strong>📋 Supported Variables:</strong><br>
+                            {{ $json.name }}, {{ $json.email }}, {{ $json.phone }}, {{ $json.company_name }}, {{
+                            $json.city }},
+                            {{ $json.services_interested_in }}, {{ $json.posh_interest }}, {{ $json.training_mode }},
+                            {{ $json.number_of_employees }}, {{ $json.preferred_timeline }}, {{
+                            $json.requirement_message }},
+                            {{ $json.website }}, {{ $json.turnover }}, {{ $json.employee_size }}
+                        </div>
+
+                        <h3 style="font-size:1rem;margin-bottom:8px;color:#374151;">POSH Training Template</h3>
+                        <textarea id="poshTemplate" class="form-input"
+                            style="width:100%;height:200px;font-family:monospace;font-size:12px;margin-bottom:12px;padding:10px;"></textarea>
+
+                        <h3 style="font-size:1rem;margin-bottom:8px;color:#374151;">Contact Us Template</h3>
+                        <textarea id="contactUsTemplate" class="form-input"
+                            style="width:100%;height:200px;font-family:monospace;font-size:12px;margin-bottom:12px;padding:10px;"></textarea>
+
+                        <div style="display:flex;gap:12px;margin-top:16px;">
+                            <button class="btn btn-primary" id="btnSaveTemplates">Save Templates</button>
+                            <button class="btn btn-danger" id="btnDeletePoshTemplate" style="background:#EF4444;">Delete
+                                POSH Template</button>
+                            <button class="btn btn-danger" id="btnDeleteContactTemplate"
+                                style="background:#EF4444;">Delete Contact Template</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+
+</html>

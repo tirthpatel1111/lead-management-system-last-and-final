@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Leads — Lead Management System</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">📊</div>
+                <div class="sidebar-brand">Lead Manager<small>Campaign System</small></div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="/dashboard" class="nav-item" data-page="dashboard"><span
+                            class="nav-icon">🏠</span><span>Dashboard</span></a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Management</div>
+                    <a href="/leads" class="nav-item" data-page="leads"><span
+                            class="nav-icon">👥</span><span>Leads</span></a>
+                    <a href="/website-leads" class="nav-item active" data-page="website-leads"><span
+                            class="nav-icon">🌐</span><span>Website Leads</span></a>
+                    <a href="/campaigns" class="nav-item" data-page="campaigns"><span
+                            class="nav-icon">📧</span><span>Campaigns</span></a>
+                    <a href="/usage" class="nav-item" data-page="usage"><span
+                            class="nav-icon">📊</span><span>Usage</span></a>
+                </div>
+
+                <div class="nav-section hidden" id="adminSection">
+                    <div class="nav-section-title">Admin</div>
+                    <a href="/admin" class="nav-item" data-page="admin"><span class="nav-icon">⚙️</span><span>Admin
+                            Panel</span></a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name" id="sidebarUserName">Loading...</div>
+                        <div class="user-role" id="sidebarUserRole">—</div>
+                    </div>
+                </div>
+                <button class="btn-logout" id="logoutBtn"><span>🚪</span><span>Sign Out</span></button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+                    <h1 class="page-title">Website Leads</h1>
+                </div>
+                <div class="top-bar-right">
+                    <span class="greeting-text">Welcome, <strong id="greetingName">User</strong></span>
+                </div>
+            </header>
+
+            <div class="content-area fade-in">
+                <!-- Action bar -->
+                <div class="action-bar">
+                    <div class="action-bar-left" style="display: flex; gap: 8px;">
+                        <button class="btn btn-primary btn-sm" id="btnTabPOSH">POSH Training</button>
+                        <button class="btn btn-secondary btn-sm" id="btnTabContactUs">Contact Us</button>
+                    </div>
+                    <div class="action-bar-right"
+                        style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px;">
+                        <button class="btn btn-secondary btn-sm" id="btnExportCSV">📥 Export to CSV</button>
+                    </div>
+                </div>
+
+                <!-- POSH Leads table -->
+                <div class="card mt-4" id="tableContainerPOSH">
+                    <div class="card-body" style="padding: 0; overflow-x: auto;">
+                        <div class="table-container" style="min-width: 1500px;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Company</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>City</th>
+                                        <th>Services</th>
+                                        <th>POSH Interest</th>
+                                        <th>Training Mode</th>
+                                        <th>Employees</th>
+                                        <th>Timeline</th>
+                                        <th>Message</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="poshTableBody">
+                                    <tr>
+                                        <td colspan="12" class="text-center" style="padding:40px;color:#9CA3AF;">
+                                            Loading...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Us Leads table -->
+                <div class="card mt-4 hidden" id="tableContainerContactUs">
+                    <div class="card-body" style="padding: 0; overflow-x: auto;">
+                        <div class="table-container" style="min-width: 1200px;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Company</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>City</th>
+                                        <th>Website</th>
+                                        <th>Turnover</th>
+                                        <th>Employees</th>
+                                        <th>Message</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contactUsTableBody">
+                                    <tr>
+                                        <td colspan="10" class="text-center" style="padding:40px;color:#9CA3AF;">
+                                            Loading...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/website_leads.js"></script>
+</body>
+
+</html>

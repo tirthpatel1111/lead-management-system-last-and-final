@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lead Management System - Internal tool for managing leads and campaigns">
+    <title>Login — Lead Management System</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <!-- ═══════════════════════════════════════════
+         LOGIN PAGE
+         ═══════════════════════════════════════════ -->
+    <div class="login-page">
+        <div class="login-card">
+            <!-- Header with logo -->
+            <div class="login-header">
+                <div class="login-logo">📊</div>
+                <h1>Lead Manager</h1>
+                <p>Sign in to your account</p>
+            </div>
+
+            <!-- Error alert (hidden by default) -->
+            <div class="alert alert-error" id="loginError">
+                <span>⚠️</span>
+                <span id="loginErrorText">Invalid credentials</span>
+            </div>
+
+            <!-- Login form -->
+            <form id="loginForm" autocomplete="off">
+                <!-- Username field -->
+                <div class="form-group">
+                    <label for="userId">Username</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="userId" class="form-input" placeholder="Enter your username" required
+                            autofocus>
+                        <span class="input-icon">👤</span>
+                    </div>
+                </div>
+
+                <!-- Password field -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" class="form-input" placeholder="Enter your password"
+                            required>
+                        <span class="input-icon">🔒</span>
+                        <button type="button" class="password-toggle" id="passwordToggle" tabindex="-1"
+                            title="Show password">👁️</button>
+                    </div>
+                </div>
+
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary" id="loginBtn">
+                    <span id="loginBtnText">Sign In</span>
+                </button>
+            </form>
+
+            <!-- Footer note -->
+            <p style="text-align: center; margin-top: 24px; font-size: 0.75rem; color: #9CA3AF;">
+                Internal use only • Contact admin for access
+            </p>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaigns — Lead Management System</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">📊</div>
+                <div class="sidebar-brand">Lead Manager<small>Campaign System</small></div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div><a href="/dashboard" class="nav-item"><span
+                            class="nav-icon">🏠</span><span>Dashboard</span></a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Management</div><a href="/leads" class="nav-item"><span
+                            class="nav-icon">👥</span><span>Leads</span><span class="nav-badge"
+                            id="leadCount">0</span></a><a href="/website-leads" class="nav-item"><span
+                            class="nav-icon">🌐</span><span>Website Leads</span></a><a href="/campaigns"
+                        class="nav-item active"><span class="nav-icon">📧</span><span>Campaigns</span></a><a
+                        href="/usage" class="nav-item" data-page="usage"><span
+                            class="nav-icon">📊</span><span>Usage</span></a>
+                </div>
+
+                <div class="nav-section hidden" id="adminSection">
+                    <div class="nav-section-title">Admin</div><a href="/admin" class="nav-item"><span
+                            class="nav-icon">⚙️</span><span>Admin Panel</span></a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name" id="sidebarUserName">Loading...</div>
+                        <div class="user-role" id="sidebarUserRole">-</div>
+                    </div>
+                </div><button class="btn-logout" id="logoutBtn"><span>🚪</span><span>Sign Out</span></button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="top-bar-left"><button class="menu-toggle" id="menuToggle">☰</button>
+                    <h1 class="page-title">Campaigns</h1>
+                </div>
+                <div class="top-bar-right"><span class="greeting-text">Welcome, <strong
+                            id="greetingName">User</strong></span></div>
+            </header>
+
+            <div class="content-area fade-in">
+                <!-- Stats -->
+                <div class="stats-grid" style="margin-bottom:24px;">
+                    <div class="stat-card" style="cursor:pointer; transition: transform 0.2s;"
+                        onclick="setCampaignFilter('')" onmouseover="this.style.transform='scale(1.02)'"
+                        onmouseout="this.style.transform='scale(1)'">
+                        <div class="stat-card-header"><span class="stat-card-label">Total Campaigns</span>
+                            <div class="stat-card-icon">📨</div>
+                        </div>
+                        <div class="stat-card-value" id="campTotal">0</div>
+                    </div>
+                    <div class="stat-card" style="cursor:pointer; transition: transform 0.2s;"
+                        onclick="setCampaignStatusFilter('sent')" onmouseover="this.style.transform='scale(1.02)'"
+                        onmouseout="this.style.transform='scale(1)'">
+                        <div class="stat-card-header"><span class="stat-card-label">Sent Successfully</span>
+                            <div class="stat-card-icon">✅</div>
+                        </div>
+                        <div class="stat-card-value" id="campSent">0</div>
+                    </div>
+                    <div class="stat-card" style="cursor:pointer; transition: transform 0.2s;"
+                        onclick="setCampaignFilter('email')" onmouseover="this.style.transform='scale(1.02)'"
+                        onmouseout="this.style.transform='scale(1)'">
+                        <div class="stat-card-header"><span class="stat-card-label">Email Campaigns</span>
+                            <div class="stat-card-icon">📧</div>
+                        </div>
+                        <div class="stat-card-value" id="campEmail">0</div>
+                    </div>
+                    <div class="stat-card" style="cursor:pointer; transition: transform 0.2s;"
+                        onclick="setCampaignFilter('whatsapp')" onmouseover="this.style.transform='scale(1.02)'"
+                        onmouseout="this.style.transform='scale(1)'">
+                        <div class="stat-card-header"><span class="stat-card-label">WhatsApp Messages</span>
+                            <div class="stat-card-icon">💬</div>
+                        </div>
+                        <div class="stat-card-value" id="campWhatsApp">0</div>
+                    </div>
+                    <div class="stat-card" style="cursor:pointer; transition: transform 0.2s;"
+                        onclick="setCampaignFilter('website')" onmouseover="this.style.transform='scale(1.02)'"
+                        onmouseout="this.style.transform='scale(1)'">
+                        <div class="stat-card-header"><span class="stat-card-label">Website Leads</span>
+                            <div class="stat-card-icon">🌐</div>
+                        </div>
+                        <div class="stat-card-value" id="campWebsite">0</div>
+                    </div>
+                </div>
+
+                <!-- Filter bar -->
+                <div class="action-bar">
+                <div class="action-bar-left">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="campSearchInput" placeholder="Search campaigns..." class="search-input">
+                        </div>
+                        <select id="typeFilter" class="filter-select">
+                            <option value="">All Types</option>
+                            <option value="email">Email</option>
+                            <option value="whatsapp">WhatsApp</option>
+                            <option value="website">Website</option>
+                        </select>
+                        <select id="statusFilter" class="filter-select">
+                            <option value="">Campaign Status</option>
+                            <option value="sent">Sent</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                        <select id="leadStatusFilter" class="filter-select">
+                            <option value="">Lead Status</option>
+                            <option value="contacted">Contacted</option>
+                            <option value="won">Approved</option>
+                            <option value="lost">Lost</option>
+                        </select>
+                        <input type="date" id="campDateFilter" class="filter-select date-filter-input" title="Filter by date">
+                        <select id="emailOpenFilter" class="filter-select" title="Email open status">
+                            <option value="">Email Status</option>
+                            <option value="opened">✅ Opened</option>
+                            <option value="sent">🟡 Sent Only</option>
+                        </select>
+                    </div>
+                    <div class="action-bar-right"
+                        style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px;">
+                        <button class="btn btn-primary btn-sm" id="btnDownloadCampaignLeads"
+                            style="background: linear-gradient(135deg, #6366F1, #4F46E5); width: auto;">📥 Download
+                            Leads</button>
+                        <span style="font-size:0.8125rem;color:#6B7280;">
+                            💡 <strong>Contacted</strong> leads → <strong>Update Outcome</strong> (mark as Approved or
+                            Lost) &nbsp;|&nbsp;
+                            <strong>Approved</strong> leads → <strong>👁️ View Meeting</strong> (view, edit, or cancel
+                            the scheduled meeting)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Campaigns table -->
+                <div class="card mt-4">
+                    <div class="card-body" style="padding:0;">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Lead</th>
+                                        <th>Name</th>
+                                        <th class="admin-col" style="display:none;">Sent By</th>
+                                        <th>Type</th>
+                                        <th>Subject</th>
+                                        <th>Message</th>
+                                        <th>Campaign Status</th>
+                                        <th>Lead Status</th>
+                                        <th>Sent At</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="campaignsTableBody">
+                                    <tr>
+                                        <td colspan="9" class="text-center" style="padding:40px;color:#9CA3AF;">Loading
+                                            campaigns...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-container" id="paginationContainer">
+                    <div class="pagination-left">
+                        <span class="pagination-label">Rows per page</span>
+                        <select id="rowsPerPage" class="pagination-select">
+                            <option value="25" selected>25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="all">All</option>
+                        </select>
+                    </div>
+                    <div class="pagination-right" id="paginationNav"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/campaigns.js"></script>
+
+    <!-- Scroll toggle button -->
+    <button class="scroll-toggle-btn" id="scrollToggleBtn" title="Scroll down">
+        <svg id="scrollArrowIcon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </button>
+    <script>
+    (function() {
+        const btn = document.getElementById('scrollToggleBtn');
+        const icon = document.getElementById('scrollArrowIcon');
+        let atBottom = false;
+
+        function updateArrow() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight;
+            const clientHeight = document.documentElement.clientHeight;
+            const isScrollable = scrollHeight > clientHeight + 50;
+            atBottom = isScrollable && scrollTop > 200 && (scrollTop + clientHeight) >= (scrollHeight - 40);
+            icon.style.transform = atBottom ? 'rotate(180deg)' : 'rotate(0deg)';
+            btn.title = atBottom ? 'Scroll to top' : 'Scroll to bottom';
+        }
+
+        btn.addEventListener('click', () => {
+            if (atBottom) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+            }
+        });
+
+        window.addEventListener('scroll', updateArrow, { passive: true });
+        updateArrow();
+    })();
+    </script>
+</body>
+
+</html>
